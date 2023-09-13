@@ -73,5 +73,10 @@ function remover()
 // 1234567.89
 function zeros()
 {
+    var texto = document.getElementById("entrada");
+    var resposta = document.getElementById("resposta");
 
+    var novo = texto.value.padStart(8, "0");
+
+    resposta.innerHTML = novo;
 }
