@@ -38,3 +38,40 @@ function invertido()
     resposta.innerHTML = novo;
 
 }
+
+// edir@prof.com 
+// usuario: edir
+// servidor: prof.com
+function email()
+{
+    var texto = document.getElementById("entrada");
+    var resposta = document.getElementById("resposta");
+
+    var email = texto.value.split("@");
+    resposta.innerHTML = "Usuario: " + email[0] + "<br>";
+    resposta.innerHTML += "Servidor: " + email[1];
+
+}
+
+// a casa azul caiu
+// cs zul ciu
+function remover()
+{
+    var texto = document.getElementById("entrada");
+    var resposta = document.getElementById("resposta");
+
+    var novo = texto.value.replaceAll("a", "");
+
+    resposta.innerHTML = novo;
+
+}
+
+// 12,00
+// 000012,00
+// tamanho 8
+// 123456,78
+// 1234567.89
+function zeros()
+{
+
+}
