@@ -6,20 +6,26 @@ export default function Cidades()
     const [cidades, setCidade] = useState(["Curitiba", "Colombo", "Pinhais"]);
     const [nova, setNova] = useState();
 
+    // gerando os li para cada item do vetor
     let lista = cidades.map(function(item){
         return <li key={ item }>{ item }</li>
     })
 
+    // adiciona cidade no vetor cidades
     function add()
     {
-        // cidades.push(nova);
-        setCidade([...cidades, nova])
-        console.log(cidades)
+
+        if (cidades.includes(nova) === true){
+            window.alert("Cidade já cadastrada");
+        } else if (nova != "") {
+            setCidade([...cidades, nova])
+        }
+        
     }
 
+    // lendo o conteudo digitado
     function ler(evento)
     {
-        console.log(evento.target.value);
         setNova(evento.target.value);
     }
 
