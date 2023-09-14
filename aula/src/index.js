@@ -1,16 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Ola from './Ola'
+import Cidades from './Cidades';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Ola nome="Maria" />
-    <Ola nome="Ana" />
-    <Ola nome="Edir" />
+    <Cidades />
   </React.StrictMode>
 );
 
