@@ -4,11 +4,13 @@ import './index.css';
 // import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Cidades from './Cidades';
+import Cadastro from './Cadastra';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Cidades />
+    <Cadastro />
   </React.StrictMode>
 );
 
