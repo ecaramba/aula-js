@@ -3,12 +3,19 @@ import ReactDOM from 'react-dom/client';
 
 import "bootstrap/dist/css/bootstrap.css"
 
-import Pokedex from './Pokedex';
+
+import Links from './Links';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
 
-    <Pokedex />
+
+
+root.render(
+    <div>
+        <Links />
+        
+
+    </div>
 );
 
 
