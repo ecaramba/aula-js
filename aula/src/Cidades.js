@@ -25,13 +25,11 @@ export default function Cidades()
     // adiciona cidade no vetor cidades
     function add()
     {
-
         if (cidades.includes(nova) === true){
             window.alert("Cidade já cadastrada");
         } else if (nova != "") {
             setCidade([...cidades, nova])
         }
-        
     }
 
     // lendo o conteudo digitado
