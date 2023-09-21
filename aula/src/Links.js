@@ -7,7 +7,7 @@ export default function Links() {
             | <a href="/pokedex">Pokedex</a> 
             | <a href="/cidades">Cidades</a> 
             | <a href="/ola">Ola</a> 
-
+            | <a href="/tarefas">Tarefas</a>
 
         </div>
         

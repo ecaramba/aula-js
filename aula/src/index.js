@@ -12,6 +12,7 @@ import Links from './Links';
 import Pokedex from './Pokedex';
 import Ola from './Ola';
 import Cidades from './Cidades'
+import Tarefas from './Tarefas';
 
 const rotas = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const rotas = createBrowserRouter([
     {
         path: "/cidades",
         element: <Cidades />
+    }, 
+    {
+        path: "/tarefas",
+        element: <Tarefas />
     }
 ]);
 
