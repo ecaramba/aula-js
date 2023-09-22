@@ -5,7 +5,9 @@ import { getFirestore,
     collection, 
     getDocs,
     orderBy,
-    query 
+    query ,
+    doc,
+    updateDoc
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -21,8 +23,27 @@ export default function Tarefas()
         const filtro = query(colTarefas, orderBy("dataCadastro"));
         const retorno = await getDocs(filtro);
         retorno.forEach((item) => {
-            console.log(item.data())
+            let dados = item.data();
+            dados.id = item.id;
+            listaTarefas.push(dados)
+            console.log(dados)
+            setListaTarefas([...listaTarefas]);
         })
+    }
+
+    async function alternaFeito(ev)
+    {
+        let id = ev.target.value;
+
+        let selecionado = listaTarefas.findIndex((item) => {
+            return item.id === id
+        })        
+
+        listaTarefas[selecionado].feito = !listaTarefas[selecionado].feito;
+        setListaTarefas([...listaTarefas]);
+
+        let tarefaAlterar = doc(db, 'tarefas', id);
+        await updateDoc(tarefaAlterar, listaTarefas[selecionado]);
     }
 
     return (
@@ -32,19 +53,26 @@ export default function Tarefas()
         <h1>Lista de Tarefas</h1>
         <button onClick={listar} className='btn btn-primary'>listar</button>
 
-        <ul className="list-group">
-        <li className="list-group-item">
-            <input className="form-check-input me-1" type="checkbox" value="" id="firstCheckbox" />
-            <label className="form-check-label" >First checkbox</label>
-        </li>
-        <li className="list-group-item">
-            <input className="form-check-input me-1" type="checkbox" value="" id="secondCheckbox" />
-            <label className="form-check-label" >Second checkbox</label>
-        </li>
-        <li className="list-group-item">
-            <input className="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox" />
-            <label className="form-check-label" >Third checkbox</label>
-        </li>
+        <ul className="list-group mt-4">
+            { 
+                listaTarefas.map((item) => {
+
+                    let cssLabel = "form-check-label";
+                    cssLabel = (item.feito === true)? cssLabel + " text-decoration-line-through" : cssLabel;
+
+                    return (
+                    <li className="list-group-item " key={item.id}>
+                        <input 
+                            className="form-check-input me-1" 
+                            type="checkbox"
+                            onChange={ alternaFeito } 
+                            value={item.id} 
+                            checked={item.feito} />
+                        <label className={cssLabel} >{ item.tarefa }</label>
+                    </li>
+                    ) 
+                })
+            }
         </ul>
 
       </div>
