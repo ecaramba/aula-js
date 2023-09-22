@@ -7,7 +7,8 @@ import { getFirestore,
     orderBy,
     query ,
     doc,
-    updateDoc
+    updateDoc,
+    addDoc
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -17,9 +18,12 @@ const colTarefas = collection(db, "tarefas");
 export default function Tarefas()
 {
     const [listaTarefas, setListaTarefas] = useState([]);
+    const [novo, setNovo] = useState("");
 
     async function listar()
     {
+        setListaTarefas([]);
+        
         const filtro = query(colTarefas, orderBy("dataCadastro"));
         const retorno = await getDocs(filtro);
         retorno.forEach((item) => {
@@ -46,6 +50,21 @@ export default function Tarefas()
         await updateDoc(tarefaAlterar, listaTarefas[selecionado]);
     }
 
+    async function add()
+    {
+
+        let novaTarefa = {
+            tarefa: novo,
+            feito: false,
+            dataCadastro: new Date()
+        };
+
+        let docCadastrado = await addDoc(colTarefas, novaTarefa);
+        
+        listar();
+
+    }
+
     return (
     <div className='row'>
       <div className='col'>
@@ -53,12 +72,26 @@ export default function Tarefas()
         <h1>Lista de Tarefas</h1>
         <button onClick={listar} className='btn btn-primary'>listar</button>
 
+        <div className='input-group'>
+            <input onChange={(e) => setNovo(e.target.value)} className='form-control' type='text' />
+            <button onClick={add} className='btn btn-outline-primary'  type='button'>Add</button>
+        </div>
+
         <ul className="list-group mt-4">
             { 
                 listaTarefas.map((item) => {
 
                     let cssLabel = "form-check-label";
                     cssLabel = (item.feito === true)? cssLabel + " text-decoration-line-through" : cssLabel;
+
+                    let dataFim = (item.dataLimite)? new Date(item.dataLimite.seconds * 1000) : "";
+                    
+                    let dataAtual = new Date();
+
+                    let atrasado = "";
+                    if (item.dataLimite && item.feito === false && dataAtual > dataFim ){
+                        atrasado = <span className="badge text-bg-danger">Atrasado</span>;
+                    }
 
                     return (
                     <li className="list-group-item " key={item.id}>
@@ -69,6 +102,10 @@ export default function Tarefas()
                             value={item.id} 
                             checked={item.feito} />
                         <label className={cssLabel} >{ item.tarefa }</label>
+                        <div className="d-flex justify-content-end">
+                            <span className="badge text-bg-primary">{ dataFim.toLocaleString() }</span>
+                            { atrasado }
+                        </div>
                     </li>
                     ) 
                 })
