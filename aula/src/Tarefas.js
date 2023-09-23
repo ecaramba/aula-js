@@ -31,7 +31,9 @@ export default function Tarefas()
             dados.id = item.id;
             listaTarefas.push(dados)
             console.log(dados)
-            setListaTarefas([...listaTarefas]);
+            // setListaTarefas([...listaTarefas]);
+            // executa somente depois do render de html ter concluido
+            setListaTarefas((listaTarefas) => [...listaTarefas, dados]);
         })
     }
 
@@ -52,7 +54,6 @@ export default function Tarefas()
 
     async function add()
     {
-
         let novaTarefa = {
             tarefa: novo,
             feito: false,
@@ -62,7 +63,12 @@ export default function Tarefas()
         let docCadastrado = await addDoc(colTarefas, novaTarefa);
         
         listar();
+    }
 
+    function del(ev)
+    {
+        let id = ev.target.getAttribute("listaid");
+        console.log(id);
     }
 
     return (
@@ -105,6 +111,12 @@ export default function Tarefas()
                         <div className="d-flex justify-content-end">
                             <span className="badge text-bg-primary">{ dataFim.toLocaleString() }</span>
                             { atrasado }
+                            <input onClick={ del }
+                                listaid={item.id}
+                                type='button'
+                                className='btn btn-outline-danger btn-sm' 
+                                value="DEL"
+                            />
                         </div>
                     </li>
                     ) 
