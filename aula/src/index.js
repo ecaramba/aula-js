@@ -41,13 +41,13 @@ const rotas = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<StrictMode> 
+
     <div className='container'>
         <Links />
         <RouterProvider router={ rotas }></RouterProvider>
 
     </div>
-</StrictMode>
+
 );
 
 

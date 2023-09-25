@@ -1,5 +1,5 @@
 import firebaseApp from './config'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { getFirestore, 
     collection, 
@@ -8,7 +8,8 @@ import { getFirestore,
     query ,
     doc,
     updateDoc,
-    addDoc
+    addDoc,
+    deleteDoc
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -19,6 +20,7 @@ export default function Tarefas()
 {
     const [listaTarefas, setListaTarefas] = useState([]);
     const [novo, setNovo] = useState("");
+    const [carregado, setCarregado] = useState(false);
 
     async function listar()
     {
@@ -30,7 +32,6 @@ export default function Tarefas()
             let dados = item.data();
             dados.id = item.id;
             listaTarefas.push(dados)
-            console.log(dados)
             // setListaTarefas([...listaTarefas]);
             // executa somente depois do render de html ter concluido
             setListaTarefas((listaTarefas) => [...listaTarefas, dados]);
@@ -65,18 +66,28 @@ export default function Tarefas()
         listar();
     }
 
-    function del(ev)
+    async function del(ev)
     {
         let id = ev.target.getAttribute("listaid");
-        console.log(id);
+        let selecionado = doc(db, 'tarefas', id);
+        await deleteDoc(selecionado);
+        listar();
     }
+
+    // Executa apos o componente ser renderizado
+    useEffect(()=> {
+        if (carregado === false) {
+            
+            listar();
+            setCarregado(true);
+        }
+    }, [ carregado ]);
 
     return (
     <div className='row'>
       <div className='col'>
 
         <h1>Lista de Tarefas</h1>
-        <button onClick={listar} className='btn btn-primary'>listar</button>
 
         <div className='input-group'>
             <input onChange={(e) => setNovo(e.target.value)} className='form-control' type='text' />
