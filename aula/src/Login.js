@@ -1,3 +1,11 @@
+import firebaseApp from './config'
+import { 
+    getFirestore,
+    getDoc
+ } from 'firebase/firestore';
+
+const db = getFirestore(firebaseApp);
+
 
 const css = {
     card: {
@@ -10,6 +18,13 @@ const css = {
 
 export default function Login()
 {
+    function logar(ev)
+    {
+        // evita o compartamento padrão do elemento
+        ev.preventDefault()
+        console.log(ev)
+    }
+
     return (
         <div style={css.card} 
             className="d-flex justify-content-center align-items-center">
@@ -19,7 +34,7 @@ export default function Login()
                     <div className="card-body">
                         <h5 className="card-title">Login</h5>
 
-                        <form>
+                        <form onSubmit={ logar }>
 
                             <div style={css.input}>
                                 <label className="form-label">Usuário</label>
