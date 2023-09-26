@@ -24,18 +24,28 @@ export default function Tarefas()
 
     async function listar()
     {
-        setListaTarefas([]);
-        
-        const filtro = query(colTarefas, orderBy("dataCadastro"));
-        const retorno = await getDocs(filtro);
-        retorno.forEach((item) => {
-            let dados = item.data();
-            dados.id = item.id;
-            listaTarefas.push(dados)
-            // setListaTarefas([...listaTarefas]);
-            // executa somente depois do render de html ter concluido
-            setListaTarefas((listaTarefas) => [...listaTarefas, dados]);
-        })
+        let tarefas = localStorage.getItem("tarefas");
+
+        if (tarefas)
+        {
+            setListaTarefas( JSON.parse(tarefas) );    
+        } else 
+        {
+
+            setListaTarefas([]);
+            
+            const filtro = query(colTarefas, orderBy("dataCadastro"));
+            const retorno = await getDocs(filtro);
+            retorno.forEach((item) => {
+                let dados = item.data();
+                dados.id = item.id;
+                listaTarefas.push(dados)
+                // setListaTarefas([...listaTarefas]);
+                // executa somente depois do render de html ter concluido
+                setListaTarefas((listaTarefas) => [...listaTarefas, dados]);
+                localStorage.setItem("tarefas", JSON.stringify(listaTarefas))
+            })
+        }
     }
 
     async function alternaFeito(ev)
