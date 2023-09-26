@@ -62,16 +62,26 @@ export default function Tarefas()
         };
 
         let docCadastrado = await addDoc(colTarefas, novaTarefa);
-        
-        listar();
+        novaTarefa.id = docCadastrado.id;
+        listaTarefas.push(novaTarefa);
+
+        setListaTarefas([...listaTarefas]);
+
     }
 
     async function del(ev)
     {
         let id = ev.target.getAttribute("listaid");
         let selecionado = doc(db, 'tarefas', id);
+        console.log(id, listaTarefas)
         await deleteDoc(selecionado);
-        listar();
+
+        let idx = listaTarefas.findIndex((item) => {
+            return item.id === id;
+        });
+        listaTarefas.splice(idx, 1);
+        setListaTarefas([...listaTarefas]);
+        
     }
 
     // Executa apos o componente ser renderizado
