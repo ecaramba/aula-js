@@ -9,7 +9,8 @@ import { getFirestore,
     doc,
     updateDoc,
     addDoc,
-    deleteDoc
+    deleteDoc,
+    where
 } from "firebase/firestore";
 
 import Login from './Login';
@@ -25,9 +26,11 @@ function Tarefas(props)
     const [novo, setNovo] = useState("");
     const [carregado, setCarregado] = useState(false);
 
+
+
     async function listar()
     {
-        let tarefas = localStorage.getItem("tarefas");
+        let tarefas = sessionStorage.getItem("tarefas");
 
         if (tarefas)
         {
@@ -37,7 +40,9 @@ function Tarefas(props)
             
             setListaTarefas([]);
             
-            const filtro = query(colTarefas, orderBy("dataCadastro"));
+            const filtro = query(colTarefas, 
+                where("usuario", "==", props.usuario.email), 
+                orderBy("dataCadastro"));
             const retorno = await getDocs(filtro);
             retorno.forEach((item) => {
                 let dados = item.data();
@@ -46,7 +51,7 @@ function Tarefas(props)
                 // setListaTarefas([...listaTarefas]);
                 // executa somente depois do render de html ter concluido
                 setListaTarefas((listaTarefas) => [...listaTarefas, dados]);
-                localStorage.setItem("tarefas", JSON.stringify(listaTarefas))
+                sessionStorage.setItem("tarefas", JSON.stringify(listaTarefas))
             })
         }
     }
@@ -71,7 +76,8 @@ function Tarefas(props)
         let novaTarefa = {
             tarefa: novo,
             feito: false,
-            dataCadastro: new Date()
+            dataCadastro: new Date(),
+            usuario: props.usuario.email
         };
         
         let docCadastrado = await addDoc(colTarefas, novaTarefa);
