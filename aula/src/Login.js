@@ -11,6 +11,8 @@ import {
 
  import sha1 from 'js-sha1'
 
+import { useState } from 'react'
+
 const db = getFirestore(firebaseApp);
 
 
@@ -23,10 +25,15 @@ const css = {
     }
 }
 
-export default function Login()
+export default function Login(props)
 {
+
+    const [erro, setErro] = useState(false);
+
     async function logar(ev)
     {
+        setErro(false);
+
         // evita o compartamento padrão do elemento
         ev.preventDefault()
         let usuario = ev.target[0].value;
@@ -42,8 +49,12 @@ export default function Login()
 
         if (retorno.empty === true) {
             console.log("usuario ou senha incorretos");
+            setErro(true);
         } else {
             console.log("usuario logado")
+            props.logado(true);
+
+           sessionStorage.setItem("usuarioLogado", JSON.stringify(retorno.docs[0].data()));
         }
 
     }
@@ -52,6 +63,11 @@ export default function Login()
         <div style={css.card} 
             className="d-flex justify-content-center align-items-center">
             <div className="col-6 mt-4">
+
+                { (erro == true) 
+                    ? <div className="alert alert-danger">Usuário ou Senha incorretos</div>
+                    : ""
+                }
 
                 <div className="card">
                     <div className="card-body">

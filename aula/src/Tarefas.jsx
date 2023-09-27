@@ -12,11 +12,14 @@ import { getFirestore,
     deleteDoc
 } from "firebase/firestore";
 
-const db = getFirestore(firebaseApp);
+import Login from './Login';
 
+const db = getFirestore(firebaseApp);
 const colTarefas = collection(db, "tarefas");
 
-export default function Tarefas()
+
+
+function Tarefas(props)
 {
     const [listaTarefas, setListaTarefas] = useState([]);
     const [novo, setNovo] = useState("");
@@ -31,7 +34,7 @@ export default function Tarefas()
             setListaTarefas( JSON.parse(tarefas) );    
         } else 
         {
-
+            
             setListaTarefas([]);
             
             const filtro = query(colTarefas, orderBy("dataCadastro"));
@@ -47,22 +50,22 @@ export default function Tarefas()
             })
         }
     }
-
+    
     async function alternaFeito(ev)
     {
         let id = ev.target.value;
-
+        
         let selecionado = listaTarefas.findIndex((item) => {
             return item.id === id
         })        
-
+        
         listaTarefas[selecionado].feito = !listaTarefas[selecionado].feito;
         setListaTarefas([...listaTarefas]);
-
+        
         let tarefaAlterar = doc(db, 'tarefas', id);
         await updateDoc(tarefaAlterar, listaTarefas[selecionado]);
     }
-
+    
     async function add()
     {
         let novaTarefa = {
@@ -70,22 +73,22 @@ export default function Tarefas()
             feito: false,
             dataCadastro: new Date()
         };
-
+        
         let docCadastrado = await addDoc(colTarefas, novaTarefa);
         novaTarefa.id = docCadastrado.id;
         listaTarefas.push(novaTarefa);
-
+        
         setListaTarefas([...listaTarefas]);
-
+        
     }
-
+    
     async function del(ev)
     {
         let id = ev.target.getAttribute("listaid");
         let selecionado = doc(db, 'tarefas', id);
         console.log(id, listaTarefas)
         await deleteDoc(selecionado);
-
+        
         let idx = listaTarefas.findIndex((item) => {
             return item.id === id;
         });
@@ -93,7 +96,7 @@ export default function Tarefas()
         setListaTarefas([...listaTarefas]);
         
     }
-
+    
     // Executa apos o componente ser renderizado
     useEffect(()=> {
         if (carregado === false) {
@@ -103,11 +106,20 @@ export default function Tarefas()
         }
     }, [ carregado ]);
 
+    function sair()
+    {
+        sessionStorage.clear();
+        props.logado(false);
+
+    }
+    
     return (
-    <div className='row'>
+        <div className='row'>
       <div className='col'>
 
         <h1>Lista de Tarefas</h1>
+
+        <p className='text-end'>Olá {props.usuario.nome} [<a href='#' onClick={sair}>Sair</a>]</p>
 
         <div className='input-group'>
             <input onChange={(e) => setNovo(e.target.value)} className='form-control' type='text' />
@@ -117,21 +129,21 @@ export default function Tarefas()
         <ul className="list-group mt-4">
             { 
                 listaTarefas.map((item) => {
-
+                    
                     let cssLabel = "form-check-label";
                     cssLabel = (item.feito === true)? cssLabel + " text-decoration-line-through" : cssLabel;
-
+                    
                     let dataFim = (item.dataLimite)? new Date(item.dataLimite.seconds * 1000) : "";
                     
                     let dataAtual = new Date();
-
+                    
                     let atrasado = "";
                     if (item.dataLimite && item.feito === false && dataAtual > dataFim ){
                         atrasado = <span className="badge text-bg-danger">Atrasado</span>;
                     }
 
                     return (
-                    <li className="list-group-item " key={item.id}>
+                        <li className="list-group-item " key={item.id}>
                         <input 
                             className="form-check-input me-1" 
                             type="checkbox"
@@ -147,7 +159,7 @@ export default function Tarefas()
                                 type='button'
                                 className='btn btn-outline-danger btn-sm' 
                                 value="DEL"
-                            />
+                                />
                         </div>
                     </li>
                     ) 
@@ -157,5 +169,27 @@ export default function Tarefas()
 
       </div>
     </div>
+    )
+}
+
+export default function Permissao()
+{
+    const [logado, setLogado] = useState(false);
+
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+
+    useEffect(()=>{
+        if (usuarioLogado) {
+            setLogado(true);
+        }
+    })
+
+    return (
+        <div>
+        { (logado == false)
+            ? <Login logado={setLogado} />
+            : <Tarefas usuario={usuarioLogado} logado={setLogado} />
+        }
+        </div>
     )
 }
