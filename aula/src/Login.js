@@ -1,8 +1,15 @@
 import firebaseApp from './config'
 import { 
     getFirestore,
-    getDoc
+    getDocs,
+    doc,
+    query,
+    where,
+    collection,
+    Firestore
  } from 'firebase/firestore';
+
+ import sha1 from 'js-sha1'
 
 const db = getFirestore(firebaseApp);
 
@@ -18,11 +25,27 @@ const css = {
 
 export default function Login()
 {
-    function logar(ev)
+    async function logar(ev)
     {
         // evita o compartamento padrão do elemento
         ev.preventDefault()
-        console.log(ev)
+        let usuario = ev.target[0].value;
+        let senha = ev.target[1].value;
+        
+        let registro = collection(db, "usuarios");
+
+        let pesq = query(registro, 
+            where("senha", "==", sha1(senha)),
+            where("email", '==', usuario)
+            )
+        let retorno = await getDocs(pesq);
+
+        if (retorno.empty === true) {
+            console.log("usuario ou senha incorretos");
+        } else {
+            console.log("usuario logado")
+        }
+
     }
 
     return (
