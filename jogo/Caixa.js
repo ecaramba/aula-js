@@ -27,12 +27,12 @@ export default function Caixa(props)
 
         if (jogador == 0)
         {
-            setJogador(props.jogador);
+            setJogador(props.jogador);            
             
+            // por causa da farma que o react trabalha com 
+            // array em variaveis state
             let tabuleiro = [...props.tabuleiro];
-
-            tabuleiro[ind] = jogador;
-
+            tabuleiro.splice(ind, 1, props.jogador);
 
             props.alteraTabuleiro([...tabuleiro]);
             
@@ -40,6 +40,8 @@ export default function Caixa(props)
             props.trocaJogador(proximo);
             
             console.log(tabuleiro, props.posicao);
+
+            props.rodaTurno();
         }
     }
 

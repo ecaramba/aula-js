@@ -42,18 +42,21 @@ export default function App() {
       <View style={styles.linha} >
         <Caixa 
           posicao={1}
+          rodaTurno={turno}
           alteraTabuleiro={setTabuleiro}
           tabuleiro={ tabuleiro }
           jogador={jogador} 
           trocaJogador={setJogador} />
         <Caixa 
           posicao={2}
+          rodaTurno={turno}
           alteraTabuleiro={setTabuleiro}
           tabuleiro={ tabuleiro }
           jogador={jogador} 
           trocaJogador={setJogador} />
         <Caixa 
           posicao={3}
+          rodaTurno={turno}
           alteraTabuleiro={setTabuleiro}
           tabuleiro={ tabuleiro }
           jogador={jogador} 
@@ -63,18 +66,21 @@ export default function App() {
       <View style={styles.linha}>
       <Caixa 
           posicao={4}
+          rodaTurno={turno}
           alteraTabuleiro={setTabuleiro}
           tabuleiro={ tabuleiro }
           jogador={jogador} 
           trocaJogador={setJogador} />
         <Caixa 
           posicao={5}
+          rodaTurno={turno}
           tabuleiro={ tabuleiro }
           jogador={jogador} 
           alteraTabuleiro={setTabuleiro}
           trocaJogador={setJogador} />
         <Caixa 
           posicao={6}
+          rodaTurno={turno}
           tabuleiro={ tabuleiro }
           alteraTabuleiro={setTabuleiro}
           jogador={jogador} 
@@ -84,18 +90,21 @@ export default function App() {
       <View style={styles.linha}>
         <Caixa 
           posicao={7}
+          rodaTurno={turno}
           tabuleiro={ tabuleiro }
           alteraTabuleiro={setTabuleiro}
           jogador={jogador} 
           trocaJogador={setJogador} />
         <Caixa 
           posicao={8}
+          rodaTurno={turno}
           tabuleiro={ tabuleiro }
           alteraTabuleiro={setTabuleiro}
           jogador={jogador} 
           trocaJogador={setJogador} />
         <Caixa 
           posicao={9}
+          rodaTurno={turno}
           tabuleiro={ tabuleiro }
           alteraTabuleiro={setTabuleiro}
           jogador={jogador} 
