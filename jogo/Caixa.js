@@ -25,8 +25,12 @@ export default function Caixa(props)
     {
         setJogador(props.jogador);
 
-        let proximo = (props.jogador == 1)? 2 : 1;
+        props.tabuleiro[props.posicao - 1] = jogador;
 
+        console.log(props.tabuleiro, props.posicao)
+       props.alteraTabuleiro(props.tabuleiro);
+
+        let proximo = (props.jogador == 1)? 2 : 1;
         props.trocaJogador(proximo);
     }
 
