@@ -23,12 +23,20 @@ export default function App() {
     1 = 5 = 9
     3 = 5 = 7
 
-
   */
+
+  function turno()
+  {
+    let vteste = [0,0,0, 0,0,0, 0,0,0];
+
+    if (vteste[0] == vteste[1] &&  vteste[1] == vteste[2]) {
+      console.log("o vencedor é: " + vteste[1])
+    }
+  }
 
   return (
     <View style={styles.container}>
-      <Text>Olá galera</Text>
+      <Text style={styles.infJogador}>Agora é a vez do jogador {jogador} </Text>
 
     <View style={styles.tabuleiro}>    
       <View style={styles.linha} >
@@ -106,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
   },
 
   tabuleiro: {
@@ -115,6 +123,10 @@ const styles = StyleSheet.create({
 
   linha: {
     flexDirection: "row"
+  },
+
+  infJogador: {
+    fontSize: 22
   }
 
 });

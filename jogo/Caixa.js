@@ -23,15 +23,24 @@ export default function Caixa(props)
 
     function jogar()
     {
-        setJogador(props.jogador);
+        let ind = props.posicao -1;
 
-        props.tabuleiro[props.posicao - 1] = jogador;
+        if (jogador == 0)
+        {
+            setJogador(props.jogador);
+            
+            let tabuleiro = [...props.tabuleiro];
 
-        console.log(props.tabuleiro, props.posicao)
-       props.alteraTabuleiro(props.tabuleiro);
+            tabuleiro[ind] = jogador;
 
-        let proximo = (props.jogador == 1)? 2 : 1;
-        props.trocaJogador(proximo);
+
+            props.alteraTabuleiro([...tabuleiro]);
+            
+            let proximo = (props.jogador == 1)? 2 : 1;
+            props.trocaJogador(proximo);
+            
+            console.log(tabuleiro, props.posicao);
+        }
     }
 
     return (
