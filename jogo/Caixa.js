@@ -9,7 +9,9 @@ import { useState } from 'react';
 
 export default function Caixa(props)
 {
-    const [jogador, setJogador] = useState(0);
+    let ind = props.posicao -1;
+    //const [jogador, setJogador] = useState(0);
+    const jogador = props.tabuleiro[ind];
 
     let jogada = null;
 
@@ -27,7 +29,7 @@ export default function Caixa(props)
 
         if (jogador == 0)
         {
-            setJogador(props.jogador);            
+            //setJogador(props.jogador);            
             
             // por causa da farma que o react trabalha com 
             // array em variaveis state

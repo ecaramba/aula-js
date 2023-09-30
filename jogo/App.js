@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useState } from 'react';
 
@@ -9,6 +9,7 @@ export default function App() {
 
   const [jogador, setJogador] = useState(1);
   const [tabuleiro, setTabuleiro] = useState([0,0,0, 0,0,0, 0,0,0])
+  const [vencedor, setVencedor] = useState(null);
 
   /* posições ganhadoras
 
@@ -27,17 +28,64 @@ export default function App() {
 
   function turno()
   {
-    let vteste = [0,0,0, 0,0,0, 0,0,0];
+    //let vteste = [0,0,0, 0,0,0, 0,0,0];
 
-    if (vteste[0] == vteste[1] &&  vteste[1] == vteste[2]) {
-      console.log("o vencedor é: " + vteste[1])
+    if (tabuleiro[0] != 0 && tabuleiro[0] == tabuleiro[1] &&  tabuleiro[1] == tabuleiro[2]) {
+      console.log("o vencedor é: " + tabuleiro[1])
+      setVencedor(tabuleiro[1]);
     }
+    
+    if (tabuleiro[3] != 0 && tabuleiro[3] == tabuleiro[4] &&  tabuleiro[4] == tabuleiro[5]) {
+      console.log("o vencedor é: " + tabuleiro[3])
+      setVencedor(tabuleiro[3]);
+    }
+
+    if (tabuleiro[6] != 0 && tabuleiro[6] == tabuleiro[7] &&  tabuleiro[7] == tabuleiro[8]) {
+      console.log("o vencedor é: " + tabuleiro[6])
+      setVencedor(tabuleiro[6]);
+    }
+
+    if (tabuleiro[0] != 0 && tabuleiro[0] == tabuleiro[3] &&  tabuleiro[3] == tabuleiro[6]) {
+      console.log("o vencedor é: " + tabuleiro[0])
+      setVencedor(tabuleiro[0]);
+    }
+
+    if (tabuleiro[1] != 0 && tabuleiro[1] == tabuleiro[4] &&  tabuleiro[4] == tabuleiro[7]) {
+      console.log("o vencedor é: " + tabuleiro[1])
+      setVencedor(tabuleiro[1]);
+    }
+
+    if (tabuleiro[2] != 0 && tabuleiro[2] == tabuleiro[5] &&  tabuleiro[5] == tabuleiro[8]) {
+      console.log("o vencedor é: " + tabuleiro[2])
+      setVencedor(tabuleiro[2]);
+    }
+    if (tabuleiro[0] != 0 && tabuleiro[0] == tabuleiro[4] &&  tabuleiro[4] == tabuleiro[8]) {
+      console.log("o vencedor é: " + tabuleiro[0])
+      setVencedor(tabuleiro[0]);
+    }
+    if (tabuleiro[2] != 0 && tabuleiro[2] == tabuleiro[4] &&  tabuleiro[4] == tabuleiro[6]) {
+      console.log("o vencedor é: " + tabuleiro[2])
+      setVencedor(tabuleiro[2]);
+    }
+
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.infJogador}>Agora é a vez do jogador {jogador} </Text>
+      
+      { (vencedor != null)
+        ? <Text style={styles.infJogador}>O vencedor é o jogador {jogador} </Text> 
+        : <Text style={styles.infJogador}>Agora é a vez do jogador {jogador} </Text>
+      }
 
+      <Pressable onPress={()=> {
+        setTabuleiro([0,0,0, 0,0,0, 0,0,0]);
+        setJogador(1);
+        setVencedor(null);
+      } }>
+        <Text>Novo Jogo</Text>
+      </Pressable>
+      
     <View style={styles.tabuleiro}>    
       <View style={styles.linha} >
         <Caixa 
