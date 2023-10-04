@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, StyleSheet, Text, View, Modal, TextInput, Button } from 'react-native';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   doc,
   setDoc, 
+  updateDoc,
+  getDoc,
+  onSnapshot,
   getFirestore 
 } from 'firebase/firestore'
 
@@ -23,6 +26,27 @@ export default function App() {
   const [sala, setSala] = useState(null);
   const [exibeEntrar, setExibeEntrar] = useState(false);
 
+  useEffect(() => {
+    
+    if (sala != null)
+    {
+      // ler o banco a cada 2 segundos
+      // setInterval(async () => {
+        
+      //   let jogo = await getDoc( doc(db, "partidas", sala) );
+      //   let atual = jogo.data()
+      //   setTabuleiro(atual.tabuleiro);
+
+      // }, 2000);
+
+      onSnapshot(doc(db, 'partidas', sala), (partida) => {
+        let atual = partida.data()
+        setTabuleiro(atual.tabuleiro);
+      })
+    }
+    
+  }, [sala]);
+
   /* posições ganhadoras
 
     1 = 2 = 3
@@ -38,9 +62,17 @@ export default function App() {
 
   */
 
-  function turno()
+  async function turno()
   {
-    //let vteste = [0,0,0, 0,0,0, 0,0,0];
+   
+    if (sala != null)
+    {
+      console.log(tabuleiro)
+      await updateDoc( doc(db, "partidas", sala), {
+        "tabuleiro": tabuleiro
+      } );
+    }
+
 
     if (tabuleiro[0] != 0 && tabuleiro[0] == tabuleiro[1] &&  tabuleiro[1] == tabuleiro[2]) {
       console.log("o vencedor é: " + tabuleiro[1])
@@ -115,10 +147,12 @@ export default function App() {
 
   }
 
-  function entrarSala()
+  function entrarSala(valor)
   {
-
+      setSala(valor);
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -127,7 +161,7 @@ export default function App() {
           <View style={styles.telaEntrar}>
             <View>
             <TextInput 
-              onChangeText={ setSala }
+              onChangeText={ entrarSala }
               placeholder='Digite o Codigo da Sala'></TextInput>
 
             <Button
@@ -151,6 +185,7 @@ export default function App() {
         setTabuleiro([0,0,0, 0,0,0, 0,0,0]);
         setJogador(1);
         setVencedor(null);
+        setSala(null);
       } }>
         <Text>Novo Jogo</Text>
       </Pressable>
